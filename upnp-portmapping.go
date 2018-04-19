@@ -17,11 +17,11 @@ import (
 )
 
 const (
-	maxWaitSeconds = 8
+	maxWaitSeconds = 5
 	methodSearch   = "M-SEARCH"
 	searchTarget   = "upnp:rootdevice"
 	ssdpDiscover   = "ssdp:discover"
-	numSends       = 1
+	numSends       = 2
 )
 
 // upnpLocation returns a URL address of the UPnP daemon
