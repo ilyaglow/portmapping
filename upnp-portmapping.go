@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/huin/goupnp/dcps/internetgateway1"
+
 	"github.com/huin/goupnp/httpu"
 	"github.com/huin/goupnp/soap"
 )
@@ -144,14 +145,25 @@ func portMappingByIdx(conn *internetgateway1.WANIPConnection1, index uint16) (*P
 
 func main() {
 	host := flag.String("host", "", "Host")
-	port := flag.String("p", ":1900", "Port")
+	port := flag.String("p", ":1900", "SSDP Port")
+	upnpLoc := flag.String("upnp", "", "UPnP URL (usually something like http://ip:highportnum/rootDesc.xml)")
 	flag.Parse()
 
-	loc, err := upnpLocation(*host, *port)
-	if err != nil {
-		log.Fatal(err)
+	var loc *url.URL
+	var err error
+	if *upnpLoc == "" {
+		loc, err = upnpLocation(*host, *port)
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		loc, err = url.Parse(*upnpLoc)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
+	// ipclients, err := internetgateway2.NewWANIPConnection1ClientsByURL(loc)
 	ipclients, err := internetgateway1.NewWANIPConnection1ClientsByURL(loc)
 	if err != nil {
 		log.Fatal(err)
